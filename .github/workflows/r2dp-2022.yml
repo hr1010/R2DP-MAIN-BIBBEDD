@@ -24,6 +24,7 @@ jobs:
         Invoke-WebRequest https://raw.githubusercontent.com/Basu01/R2DP-MAIN-BIBBEDD/main/files/NGROK-EU.bat -OutFile NGROK-EU.bat
         Invoke-WebRequest https://raw.githubusercontent.com/Basu01/R2DP-MAIN-BIBBEDD/main/files/NGROK-CHECK.bat -OutFile NGROK-CHECK.bat
         Invoke-WebRequest https://raw.githubusercontent.com/Basu01/R2DP-MAIN-BIBBEDD/main/files/loop.bat -OutFile loop.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/Basu01/R2DP-MAIN-BIBBEDD/main/files/wget.exe -OutFile wget.exe
     - name: Enabling RDP Access...
       run: | 
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
