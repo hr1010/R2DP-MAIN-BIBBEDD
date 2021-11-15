@@ -1,44 +1,37 @@
-name: LuppiLandia-RDP
+name: R2DP-2022
 
 on: workflow_dispatch
 
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: windows-2022
     timeout-minutes: 9999
 
     steps:
     - name: Downloading NGROK...
       run: |
-        Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-    - name: Copying Ngrok to Windows Directory...
+        Invoke-WebRequest https://bin.equinox.io/a/kDgjLwTH9Ur/ngrok-2.3.38-windows-amd64.zip -OutFile ngrok.zip
+    - name: Extracting NGROK.exe
       run: | 
         Expand-Archive ngrok.zip
     - name: Connecting your NGROK account...
       run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
       env:
-        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+        NGROK_AUTH_TOKEN: ${{secrets.NGROK_AUTH_TOKEN}}
     - name: Downloading Important Files...
       run: |
-        Invoke-WebRequest https://raw.githubusercontent.com/linuxlamday/LuppiLandia-RDP/main/files/NGROK-EU.bat -OutFile NGROK-EU.bat
-        Invoke-WebRequest https://raw.githubusercontent.com/linuxlamday/LuppiLandia-RDP/main/files/NGROK-CHECK.bat -OutFile NGROK-CHECK.bat
-        Invoke-WebRequest https://raw.githubusercontent.com/linuxlamday/LuppiLandia-RDP/main/files/loop.bat -OutFile loop.bat
-    - name: Open ports downloading...
-      run: |
-        Invoke-WebRequest https://raw.githubusercontent.com/linuxlamday/LuppiLandia-RDP/main/files/ports.bat -OutFile ports.bat
-    - name: Opening ports...
-      run: start openports.bat
-    - name: Make YML file for NGROK.
-      run: start NGROK-EU.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/Basu01/R2DP-MAIN-BIBBEDD/main/files/NGROK-EU.bat -OutFile NGROK-EU.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/Basu01/R2DP-MAIN-BIBBEDD/main/files/NGROK-CHECK.bat -OutFile NGROK-CHECK.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/Basu01/R2DP-MAIN-BIBBEDD/main/files/loop.bat -OutFile loop.bat
     - name: Enabling RDP Access...
       run: | 
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
     - name: Creating Tunnel...
-      run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp --region ap 3389"'
+      run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp --region eu 3389"'
     - name: We are almost there! Executing a check...
       run: cmd /c NGROK-CHECK.bat
     - name: All Done! You can connect into your VPS...
-      run: cmd /c loop.bat 
+      run: cmd /c loop.bat
